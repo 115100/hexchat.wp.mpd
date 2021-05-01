@@ -1,22 +1,9 @@
 hexchat.register("MPD", "1", "MPD currently playing script")
 
 local function get_np()
-    local handle =
-        assert(
-            io.popen(
-                table.concat(
-                    {
-                        "mpc",
-                        "current",
-                        "-h",
-                        "/var/lib/mpd/socket",
-                        "-f",
-                        '"%artist% - %title% 「%album%」"'
-                    },
-                    " "
-                )
-            )
-        )
+    local handle = assert(io.popen(
+        'mpc current -h /var/lib/mpd/socket -f "%artist% - %title% 「%album%」"'
+    ))
     local res = string.gsub(assert(handle:read("*a")), "\n", "")
     handle:close()
     hexchat.command("SAY np: " .. res)
